@@ -1,11 +1,11 @@
 package com.ecommerce.sb_ecom.service.impl;
 
+import com.ecommerce.sb_ecom.exception.APIException;
+import com.ecommerce.sb_ecom.exception.ResourceNotFoundException;
 import com.ecommerce.sb_ecom.model.Category;
 import com.ecommerce.sb_ecom.repository.CategoryRepository;
 import com.ecommerce.sb_ecom.service.CategoryService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,16 +35,20 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.deleteById(id);
             return "Category has been deleted";
         }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+            throw new ResourceNotFoundException("Category not found");
         }
     }
 
     @Override
     public String updateCategory(Category category, Long id) {
         Category cat = categoryRepository.findById(id).orElse(null);
-
         if (cat == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+            throw new ResourceNotFoundException("Category not found");
+        }
+
+        Category cat1 = categoryRepository.findByCategoryName(category.getCategoryName()).orElse(null);
+        if (cat1 != null) {
+            throw new APIException("Category with name " + category.getCategoryName() + " already found");
         }
 
         cat.setCategoryName(category.getCategoryName());

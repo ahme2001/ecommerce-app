@@ -13,8 +13,5 @@ public interface CategoryService {
 
     String deleteCategory(Long id);
 
-    // update category
-    // we need category Id , and also new data
-    // we return ok if updated and fasle if not found
     String updateCategory(Category category, Long id);
 }
