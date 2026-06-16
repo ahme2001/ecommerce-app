@@ -26,15 +26,15 @@ public class CategoryController {
 
 
     @PostMapping("/public/categories")
-    public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryDTO category) {
-        categoryService.createCategory(category);
-        return new ResponseEntity<>("Category added successfully", HttpStatus.OK);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO category) {
+        CategoryDTO c = categoryService.createCategory(category);
+        return new ResponseEntity<>(c, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/categories/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable long id) {
-        String status = categoryService.deleteCategory(id);
-        return new ResponseEntity<>(status, HttpStatus.OK);
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable long id) {
+        CategoryDTO categoryDTO = categoryService.deleteCategory(id);
+        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
     }
 
 
