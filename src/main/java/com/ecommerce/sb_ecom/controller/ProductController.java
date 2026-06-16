@@ -8,6 +8,7 @@ import com.ecommerce.sb_ecom.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -69,5 +70,11 @@ public class ProductController {
     public ResponseEntity<ProductDTO>  deleteProduct(@PathVariable Long id) {
         ProductDTO productDTO = productService.deleteProduct(id);
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/products/{productId}/image")
+    public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId,@RequestParam MultipartFile image) {
+        ProductDTO product = productService.updateProductImage(productId,image);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }

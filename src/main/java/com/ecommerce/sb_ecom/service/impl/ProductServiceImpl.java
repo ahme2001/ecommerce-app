@@ -7,24 +7,33 @@ import com.ecommerce.sb_ecom.payload.ProductDTO;
 import com.ecommerce.sb_ecom.payload.ProductResponse;
 import com.ecommerce.sb_ecom.repository.CategoryRepository;
 import com.ecommerce.sb_ecom.repository.ProductRepository;
+import com.ecommerce.sb_ecom.service.FileService;
 import com.ecommerce.sb_ecom.service.ProductService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final FileService fileService;
+
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ModelMapper modelMapper) {
+    @Value("${project.image}")
+    private String path;
+    public ProductServiceImpl(FileService fileService, ProductRepository productRepository, CategoryRepository categoryRepository, ModelMapper modelMapper) {
+        this.fileService = fileService;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
@@ -151,6 +160,25 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(productFromDB);
         return productDTO;
     }
+
+    @Override
+    public ProductDTO updateProductImage(Long productId, MultipartFile image) {
+        Product productFromDB = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product with id " + productId + " not found")
+        );
+        String fileName = "";
+        try {
+            String path = this.path;
+            fileName = fileService.uploadImage(path, image);
+        }  catch (IOException e) {
+            System.out.println("Can't save image");
+        }
+        productFromDB.setImage(fileName);
+        productFromDB = productRepository.save(productFromDB);
+        return modelMapper.map(productFromDB, ProductDTO.class);
+    }
+
+
 
 
 }
