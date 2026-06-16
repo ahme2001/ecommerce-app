@@ -7,7 +7,12 @@ import com.ecommerce.sb_ecom.payload.CategoryDTO;
 import com.ecommerce.sb_ecom.payload.CategoryResponse;
 import com.ecommerce.sb_ecom.repository.CategoryRepository;
 import com.ecommerce.sb_ecom.service.CategoryService;
+import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +21,9 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
-
-    private ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
+    
+    private final ModelMapper modelMapper;
 
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,  ModelMapper modelMapper) {
@@ -27,12 +32,29 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
+    public CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(Sort.Direction.ASC, sortBy)
+                : Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        List<Category> categories = categoryPage.getContent();
         List<CategoryDTO> categoryDTOS = categories.stream()
                 .map(c -> modelMapper.map(c,CategoryDTO.class))
                 .toList();
-        return new CategoryResponse(categoryDTOS);
+        return getCategoryResponse(categoryDTOS, categoryPage);
+    }
+
+    private @NonNull CategoryResponse getCategoryResponse(List<CategoryDTO> categoryDTOS, Page<Category> categoryPage) {
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+        categoryResponse.setPageNumber(categoryPage.getNumber());
+        categoryResponse.setPageSize(categoryPage.getSize());
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setLastPage(categoryPage.isLast());
+        return categoryResponse;
     }
 
     @Override
