@@ -70,4 +70,11 @@ public class User {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
+
+
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
+    private Cart  cart;
 }
