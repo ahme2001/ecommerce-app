@@ -1,6 +1,7 @@
 package com.ecommerce.sb_ecom.exception;
 
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,6 +33,13 @@ public class GolbalHandleException {
 
     @ExceptionHandler(APIException.class)
     public ResponseEntity<Map<String,String>> handleAPIException(APIException e) {
+        Map<String,String> errors = new HashMap<>();
+        errors.put("message", e.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String,String>> handleBadRequestException(BadRequestException e) {
         Map<String,String> errors = new HashMap<>();
         errors.put("message", e.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
