@@ -77,6 +77,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtToken = jwtUtils.generateToken(userDetails); // to store token in authorization header
 
         // to store token in cookies which browser will send it automatically with each request
+        // If you use cookies, You must enable protection against csrf attack
         ResponseCookie rc = jwtUtils.getResponseCookie(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
