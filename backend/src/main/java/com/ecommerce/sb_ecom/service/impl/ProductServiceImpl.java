@@ -57,6 +57,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO getProductById(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product with id " + productId + " not found")
+        );
+        return modelMapper.map(product, ProductDTO.class);
+    }
+
+    @Override
     public ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sort = Sort.by(sortOrder.equalsIgnoreCase("asc")
                 ?  Sort.Direction.ASC : Sort.Direction.DESC,sortBy);

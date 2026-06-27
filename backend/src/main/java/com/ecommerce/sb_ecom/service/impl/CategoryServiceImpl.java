@@ -36,24 +36,34 @@ public class CategoryServiceImpl implements CategoryService {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(Sort.Direction.ASC, sortBy)
                 : Sort.by(Sort.Direction.DESC, sortBy);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-
-        Page<Category> categoryPage = categoryRepository.findAll(pageable);
-        List<Category> categories = categoryPage.getContent();
-        List<CategoryDTO> categoryDTOS = categories.stream()
-                .map(c -> modelMapper.map(c,CategoryDTO.class))
-                .toList();
-        return getCategoryResponse(categoryDTOS, categoryPage);
+        List<Category> categories;
+        if (pageNumber != null && pageSize != null) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+            Page<Category> categoryPage = categoryRepository.findAll(pageable);
+            categories = categoryPage.getContent();
+            List<CategoryDTO> categoryDTOS = categories.stream()
+                    .map(c -> modelMapper.map(c,CategoryDTO.class))
+                    .toList();
+            return getCategoryResponse(categoryDTOS, categoryPage);
+        }else {
+            categories = categoryRepository.findAll();
+            List<CategoryDTO> categoryDTOS = categories.stream()
+                    .map(c -> modelMapper.map(c,CategoryDTO.class))
+                    .toList();
+            return getCategoryResponse(categoryDTOS, null);
+        }
     }
 
     private @NonNull CategoryResponse getCategoryResponse(List<CategoryDTO> categoryDTOS, Page<Category> categoryPage) {
         CategoryResponse categoryResponse = new CategoryResponse();
         categoryResponse.setContent(categoryDTOS);
-        categoryResponse.setPageNumber(categoryPage.getNumber());
-        categoryResponse.setPageSize(categoryPage.getSize());
-        categoryResponse.setTotalPages(categoryPage.getTotalPages());
-        categoryResponse.setTotalElements(categoryPage.getTotalElements());
-        categoryResponse.setLastPage(categoryPage.isLast());
+        if (categoryPage != null) {
+            categoryResponse.setPageNumber(categoryPage.getNumber());
+            categoryResponse.setPageSize(categoryPage.getSize());
+            categoryResponse.setTotalPages(categoryPage.getTotalPages());
+            categoryResponse.setTotalElements(categoryPage.getTotalElements());
+            categoryResponse.setLastPage(categoryPage.isLast());
+        }
         return categoryResponse;
     }
 
