@@ -15,7 +15,9 @@ public class LoginResponse {
 
     private String jwtToken;
 
-    private String usernaem;
+    private String username;
+
+    private String email;
 
     private List<String> roles;
 }

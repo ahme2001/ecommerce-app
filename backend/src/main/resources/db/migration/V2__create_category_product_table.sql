@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     `product_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `product_name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(1000) NOT NULL,
-    `image` VARCHAR(300) NOT NULL,
+    `image` VARCHAR(300),
     `quantity` INT DEFAULT 0,
     `price` DOUBLE DEFAULT 0.0,
     `discount` DOUBLE DEFAULT 0.0,

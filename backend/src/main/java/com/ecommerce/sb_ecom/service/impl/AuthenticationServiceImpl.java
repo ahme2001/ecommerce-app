@@ -84,7 +84,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        LoginResponse loginResponse = new LoginResponse(userDetails.getId(), jwtToken,userDetails.getUsername(), roles);
+        LoginResponse loginResponse = new LoginResponse(userDetails.getId(), jwtToken,userDetails.getUsername(), userDetails.getEmail(), roles);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, rc.toString()).body(loginResponse);
     }
 
