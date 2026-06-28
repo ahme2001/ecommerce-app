@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
+import ProtectedRoute from "./ProtectedRoute";
 import Products from "../pages/Products";
 import Cart from "../pages/Cart";
 import Auth from "../pages/Auth";
@@ -15,9 +16,9 @@ const AppRouter = () => {
 
                 <Route element={<AppLayout />} >
                     <Route path="*" element={<Products />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                    <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+                    <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                 </Route>
 
 
