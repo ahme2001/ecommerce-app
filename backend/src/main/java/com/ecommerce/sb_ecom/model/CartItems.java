@@ -3,14 +3,16 @@ package com.ecommerce.sb_ecom.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "cart_items")
-public class CartItems {
+public class CartItems extends BasicEntity {
     /*
      * This table represent relationship between cart and product
      * in which cart can contain many products

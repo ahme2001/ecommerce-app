@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -26,6 +29,8 @@ public class Order {
                 orphanRemoval = true)
     private List<OrderItem> orderItems;
 
+    @CreationTimestamp
+    @Column(name = "order_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime orderDate;
 
     private Double totalPrice;
@@ -39,4 +44,9 @@ public class Order {
     @OneToOne()
     @JoinColumn(name = "payment_id")
     private Payment payment;
+
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private ZonedDateTime updatedAt;
 }

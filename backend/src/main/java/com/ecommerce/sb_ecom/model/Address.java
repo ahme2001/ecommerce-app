@@ -1,17 +1,15 @@
 package com.ecommerce.sb_ecom.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 @Table(name = "address")
-public class Address {
+public class Address extends  BasicEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
