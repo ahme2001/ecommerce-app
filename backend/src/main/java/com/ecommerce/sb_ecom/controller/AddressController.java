@@ -3,6 +3,7 @@ package com.ecommerce.sb_ecom.controller;
 
 import com.ecommerce.sb_ecom.payload.AddressDTO;
 import com.ecommerce.sb_ecom.service.AddressService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class AddressController {
     }
 
     @PostMapping("/addresses")
-    public ResponseEntity<AddressDTO> createAddress(@RequestBody AddressDTO addressDTO) {
+    public ResponseEntity<AddressDTO> createAddress(@Valid @RequestBody AddressDTO addressDTO) {
         AddressDTO addressDTO1 = addressService.createAddress(addressDTO);
         return new ResponseEntity<>(addressDTO1, HttpStatus.CREATED);
     }
