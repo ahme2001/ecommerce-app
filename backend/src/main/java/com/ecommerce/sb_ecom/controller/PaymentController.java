@@ -1,10 +1,12 @@
 package com.ecommerce.sb_ecom.controller;
 
+import com.ecommerce.sb_ecom.payload.CheckoutDTO;
 import com.ecommerce.sb_ecom.payload.ClientKeys;
 import com.ecommerce.sb_ecom.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +22,8 @@ public class PaymentController {
 
 
     @PostMapping("/client-key")
-    public ResponseEntity<ClientKeys> getCLientSecretKey() {
-        return new ResponseEntity<>(paymentService.getCLientSecretKey(), HttpStatus.CREATED);
+    public ResponseEntity<ClientKeys> getCLientSecretKey(@RequestBody CheckoutDTO  checkoutDTO) {
+        return new ResponseEntity<>(paymentService.getCLientSecretKey(checkoutDTO), HttpStatus.CREATED);
     }
 
 }
