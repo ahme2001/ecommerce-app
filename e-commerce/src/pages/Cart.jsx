@@ -1,7 +1,12 @@
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const { cart, loading, changeQuantity, removeItem, cartTotal } = useCart();
+
+  const navigate = useNavigate();
+
+
 
   if (loading) {
     return <p className="text-center mt-10">Loading cart...</p>;
@@ -106,7 +111,10 @@ export default function Cart() {
           <span>${cartTotal.toFixed(2)}</span>
         </p>
 
-        <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded">
+        <button 
+        className="w-full mt-4 bg-blue-600 text-white py-2 rounded"
+        onClick={() => navigate("/checkout")}
+        >
           Checkout
         </button>
 
