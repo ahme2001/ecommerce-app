@@ -33,12 +33,12 @@ export default function ProductCard({ product }) {
           <p className="text-gray-700">
             <span className="font-medium">Price:</span> 
             {(specialPrice != null && specialPrice !== price) ? (
-            <div>
+            <>
                 <span className="line-through text-gray-500 mr-2">
                     ${Number(price).toFixed(2)}
                 </span>
                     ${Number(specialPrice).toFixed(2)}
-            </div>
+            </>
             ) : (
                 <span>${Number(price).toFixed(2)}</span>
             )}

@@ -9,21 +9,25 @@ import Checkout from "../pages/checkout/Checkout";
 import AppLayout from "../components/layout/AppLayout";
 import PaymentSuccess from "../pages/checkout/PaymentSuccess";
 import PaymentCancel from "../pages/checkout/PaymentCancel";
+import { CartProvider } from '../context/CartContext';
 
 const AppRouter = () => {
     return (
         <Router>
             <Routes>
+                    <Route element={
+                        <CartProvider>
+                            <AppLayout />
+                        </CartProvider>
+                        } >
+                        <Route path="*" element={<Products />} />
+                        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                        <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+                        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                        <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
+                        <Route path="/payment-cancel" element={<ProtectedRoute><PaymentCancel /></ProtectedRoute>} />
 
-                <Route element={<AppLayout />} >
-                    <Route path="*" element={<Products />} />
-                    <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-                    <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
-                    <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-                    <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
-                    <Route path="/payment-cancel" element={<ProtectedRoute><PaymentCancel /></ProtectedRoute>} />
-                </Route>
-
+                    </Route>
 
                 <Route path="/auth" element={<Auth />} />
 
