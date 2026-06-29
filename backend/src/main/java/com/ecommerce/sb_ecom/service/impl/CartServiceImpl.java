@@ -117,7 +117,7 @@ public class CartServiceImpl implements CartService {
                 if (availableQuantity >= (item.getQuantity() + 1))
                     item.setQuantity(item.getQuantity() + 1);
                 else
-                    throw new APIException("This product is out of stock");
+                    throw new APIException("There no available quantity for this product");
                 newCartPrice = cart.getTotalPrice() + product.getSpecialPrice();
             }else if (operation.equalsIgnoreCase("subtract")) {
                 if (item.getQuantity() > 1)
@@ -161,8 +161,10 @@ public class CartServiceImpl implements CartService {
         c.setCartId(cart.getCartId());
         c.setTotalPrice(cart.getTotalPrice());
         List<ProductDTO> p = cart.getCartItems().stream().map(cartItem -> {
-            ProductDTO tmp =  modelMapper.map(cartItem.getProduct(), ProductDTO.class);
-            tmp.setQuantity(cartItem.getQuantity());
+            Product product = cartItem.getProduct();
+            ProductDTO tmp =  modelMapper.map(product, ProductDTO.class);
+            Integer quantity = (product.getQuantity() < cartItem.getQuantity()) ? product.getQuantity() : cartItem.getQuantity();
+            tmp.setQuantity(quantity);
             return tmp;
         }).toList();
         c.setProducts(p);

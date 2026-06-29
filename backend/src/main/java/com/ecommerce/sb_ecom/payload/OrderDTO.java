@@ -17,6 +17,5 @@ public class OrderDTO {
     private LocalDateTime orderDate;
     private String orderStatus;
     private Double totalPrice;
-    private PaymentDTO paymentDTO;
     private Long addressId;
 }

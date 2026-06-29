@@ -32,4 +32,11 @@ public class Cart extends BasicEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true)
     private List<CartItems> cartItems = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @Column(name = "payment_intent_id")
+    private String paymentIntentId;
 }

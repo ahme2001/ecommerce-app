@@ -35,15 +35,13 @@ public class Order {
 
     private Double totalPrice;
 
+    private Long paidAmount;
+
     private String orderStatus;
 
     @ManyToOne()
     @JoinColumn(name = "address_id")
     private Address address;
-
-    @OneToOne()
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
 
 
     @UpdateTimestamp

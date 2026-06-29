@@ -12,7 +12,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -66,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/webhook").permitAll()
 //                        .requestMatchers("/api/public/**").permitAll()
 //                        .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -85,12 +85,12 @@ public class SecurityConfig {
 
     // Defining endponts here , makes them not going in spring security
     // and it will be completed bypassed from spring security
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().requestMatchers(
-                "/v2/api-docs", "/configuration/ui",
-                "/swagger-resources/**", "/configuration/security",
-                "/swagger-ui.html", "/webjars/**"
-        ));
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web -> web.ignoring().requestMatchers(
+//                "/v2/api-docs", "/configuration/ui",
+//                "/swagger-resources/**", "/configuration/security",
+//                "/swagger-ui.html", "/webjars/**"
+//        ));
+//    }
 }
