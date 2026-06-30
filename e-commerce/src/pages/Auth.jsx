@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Auth() {
 
@@ -88,6 +89,23 @@ export default function Auth() {
         >
           {loading ? "Loading..." : "Submit"}
         </button>
+
+        {/* Google Login */}
+        <a
+          href="http://localhost:8080/oauth2/authorization/google"
+          className="block"
+        >
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition"
+          >
+            <FcGoogle className="text-2xl" />
+
+            <span className="font-medium text-gray-700">
+              Continue with Google
+            </span>
+          </button>
+        </a>
         
         {error && (
           <div className="bg-red-100 text-red-600 p-2 rounded">
@@ -105,7 +123,6 @@ export default function Auth() {
         </p>
 
       </form>
-
     </div>
   );
 }

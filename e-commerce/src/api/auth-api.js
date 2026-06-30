@@ -18,3 +18,8 @@ export const register = async (data) => {
         throw error.response.data;
     }
 }
+
+export const getUserData = async () => {
+    const response = await instance.get("/auth/user");
+    return response.data;
+}

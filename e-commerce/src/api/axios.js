@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL + "/api",
@@ -16,6 +17,14 @@ instance.interceptors.request.use(
         return config;
     },
     (error) => {
+    const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong";
+
+        // Show popup instead of console errors
+        toast.error(message);
+
         return Promise.reject(error);
     }
 );

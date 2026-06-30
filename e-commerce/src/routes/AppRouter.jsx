@@ -9,6 +9,7 @@ import Checkout from "../pages/checkout/Checkout";
 import AppLayout from "../components/layout/AppLayout";
 import PaymentSuccess from "../pages/checkout/PaymentSuccess";
 import PaymentCancel from "../pages/checkout/PaymentCancel";
+import OAuth2RedirectHandler from "../pages/OAUth2RedirectHandler"
 import { CartProvider } from '../context/CartContext';
 
 const AppRouter = () => {
@@ -26,9 +27,10 @@ const AppRouter = () => {
                         <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                         <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
                         <Route path="/payment-cancel" element={<ProtectedRoute><PaymentCancel /></ProtectedRoute>} />
-
+                        
                     </Route>
-
+                
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
                 <Route path="/auth" element={<Auth />} />
 
             </Routes>
