@@ -2,4 +2,4 @@
 
 backend/logs/
 backend/env.properties
-
+backend/.env
