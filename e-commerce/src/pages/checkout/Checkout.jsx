@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -12,22 +12,30 @@ const stripePromise = loadStripe(
 
 export default function Checkout() {
 
-    const [clientSecret, setClientSecret] = useState("");
+    const [clientSecret, setClientSecret] = useState();
     const { cart, addressId } = useCart();
+    const initialized = useRef(false)
 
     // Replace this later with your real cart id
     const cartId = cart?.cartId || 1;
 
     useEffect(() => {
-        async function initializePayment() {
-            try {
-                const response =
-                    await createPaymentIntent(cartId,addressId);
-                setClientSecret(response.clientSecretKey);
-            } catch (error) {
-                console.error(error);
-            }
+
+        if(initialized.current) {
+            return;
         }
+
+        initialized.current = true
+
+        async function initializePayment() {
+            await createPaymentIntent(cartId,addressId)
+                .then( (res) => 
+                    setClientSecret(res.data.clientSecretKey)
+                ).catch( (err) => {
+                    console.log(err)
+        });
+        }
+        
         initializePayment();
     }, []);
 

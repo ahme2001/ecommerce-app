@@ -6,5 +6,5 @@ export const createPaymentIntent = async (cartId, addressId) => {
         addressId: addressId
     });
 
-    return response.data;
+    return response;
 };

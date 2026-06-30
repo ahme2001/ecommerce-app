@@ -1,6 +1,6 @@
 package com.ecommerce.sb_ecom.payload;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class CheckoutDTO {
 
-    @NotBlank
+    @NotNull
     private long cartId;
 
-    @NotBlank
+    @NotNull(message = "You must choose or create you address")
     private long addressId;
 }

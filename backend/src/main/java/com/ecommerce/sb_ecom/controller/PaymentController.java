@@ -3,6 +3,7 @@ package com.ecommerce.sb_ecom.controller;
 import com.ecommerce.sb_ecom.payload.CheckoutDTO;
 import com.ecommerce.sb_ecom.payload.ClientKeys;
 import com.ecommerce.sb_ecom.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class PaymentController {
 
 
     @PostMapping("/client-key")
-    public ResponseEntity<ClientKeys> getCLientSecretKey(@RequestBody CheckoutDTO  checkoutDTO) {
+    public ResponseEntity<ClientKeys> getCLientSecretKey(@Valid @RequestBody CheckoutDTO  checkoutDTO) {
         return new ResponseEntity<>(paymentService.getCLientSecretKey(checkoutDTO), HttpStatus.CREATED);
     }
 
@@ -28,7 +29,6 @@ public class PaymentController {
     public ResponseEntity<Void> receivePaymentIntent(
             @RequestHeader("Stripe-Signature") String signature,
             @RequestBody String payload) {
-        System.out.println("we are hereeeeeeeeeeeee");
         paymentService.listenToStripeWebhook(signature,payload);
         return ResponseEntity.ok().build();
     }

@@ -19,7 +19,7 @@ export default function CheckoutForm() {
             elements,
             confirmParams: {
                 return_url:
-                    "http://localhost:5173/",
+                    "http://localhost:5173/payment-success",
             },
         });
         if (result.error) {
