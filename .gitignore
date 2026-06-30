@@ -1,3 +1,5 @@
 ./e-commerce/.env
 
 backend/logs/
+backend/env.properties
+
