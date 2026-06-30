@@ -1,12 +1,29 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getAddresses } from "../api/address-api"
+import AddressCard from "../components/address/AddressCard";
+
 
 export default function Cart() {
-  const { cart, loading, changeQuantity, removeItem, cartTotal } = useCart();
-
+  const { cart, loading, setAddressId,changeQuantity, removeItem, cartTotal } = useCart();
+  const [ address, setAddress] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const navigate = useNavigate();
 
 
+  useEffect( () => {
+      const getAddressesForUser = async () => {
+        try{
+          const addressesData = await getAddresses();
+          setAddress(addressesData || [])
+        } catch (err) {
+          console.error(err);
+        }
+      }
+  
+      getAddressesForUser()
+    }, []);
 
   if (loading) {
     return <p className="text-center mt-10">Loading cart...</p>;
@@ -103,6 +120,53 @@ export default function Cart() {
 
       {/* Summary */}
       <div className="bg-white p-4 shadow rounded h-fit">
+
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold mb-3">
+            Select Shipping Address
+          </h3>
+
+          {address.length === 0 ? (
+            <p className="text-gray-500">No addresses yet</p>
+          ) : (
+            <div className="space-y-3">
+
+            {address.map((addr) => {
+              const id = addr.addressId || addr.id;
+
+              return (
+                <div key={id} className="flex items-start gap-3">
+
+                  {/* Selection box OUTSIDE card */}
+                  <input
+                    type="radio"
+                    name="address"
+                    checked={selectedAddressId === id}
+                    onChange={() => {
+                      setSelectedAddressId(id)
+                      setAddressId(id)
+                    }}
+                    className="mt-4"
+                  />
+
+                  {/* Pure AddressCard */}
+                  <div
+                    className={`flex-1 border rounded-lg transition
+                      ${selectedAddressId === id
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200"
+                      }`}
+                  >
+                    <AddressCard address={addr} />
+                  </div>
+
+                </div>
+              );
+            })}
+
+          </div>
+          )}
+        </div>
 
         <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 

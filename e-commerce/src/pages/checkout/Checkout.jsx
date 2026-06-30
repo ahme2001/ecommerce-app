@@ -13,7 +13,7 @@ const stripePromise = loadStripe(
 export default function Checkout() {
 
     const [clientSecret, setClientSecret] = useState("");
-    const { cart } = useCart();
+    const { cart, addressId } = useCart();
 
     // Replace this later with your real cart id
     const cartId = cart?.cartId || 1;
@@ -22,7 +22,7 @@ export default function Checkout() {
         async function initializePayment() {
             try {
                 const response =
-                    await createPaymentIntent(cartId);
+                    await createPaymentIntent(cartId,addressId);
                 setClientSecret(response.clientSecretKey);
             } catch (error) {
                 console.error(error);

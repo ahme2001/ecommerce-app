@@ -11,6 +11,7 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [addressId, setAddressId] = useState();
 
     // Load cart from backend
   
@@ -71,6 +72,8 @@ export function CartProvider({ children }) {
         value={{
             cart,
             loading,
+            addressId,
+            setAddressId,
             addToCart,
             changeQuantity,
             removeItem,
