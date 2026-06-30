@@ -41,6 +41,8 @@ public class User extends BasicEntity {
     @NotBlank
     private String password;
 
+    private String provider;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

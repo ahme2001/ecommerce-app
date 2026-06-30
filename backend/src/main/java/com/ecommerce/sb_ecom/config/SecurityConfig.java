@@ -1,11 +1,10 @@
 package com.ecommerce.sb_ecom.config;
 
-import com.ecommerce.sb_ecom.utils.AuthEntryPointJwt;
-import com.ecommerce.sb_ecom.utils.AuthTokenFilter;
-import com.ecommerce.sb_ecom.utils.UserDetailsServiceImpl;
+import com.ecommerce.sb_ecom.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -29,7 +28,13 @@ public class SecurityConfig {
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
+    CustomOAuth2UserService  customOAuth2UserService;
+
+    @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    @Autowired
+    OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public AuthTokenFilter  authTokenFilterBean() {
@@ -54,7 +59,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain SecurityFilterChain(HttpSecurity http) {
+    @Order(1)
+    public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/oauth2/**", "/login/oauth2/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(requests -> requests
+                        .anyRequest().permitAll())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler((request, response, exception) ->
+                                response.sendRedirect("/login?error=" + exception.getMessage()))
+                );
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(e -> e.authenticationEntryPoint(unauthorizedHandler))
@@ -66,7 +90,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/api/webhook").permitAll()
-//                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
 //                        .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()

@@ -66,7 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
                 RequestOptions.builder()
                         .setIdempotencyKey(idempotencyKey)
                         .build();
-        
+
         PaymentIntent paymentIntent;
         if (cart.getPaymentIntentId() == null) { // create new paymentIntent
             paymentIntent = createNewPaymentIntent(finalTotalPrice, cart, client, options);
