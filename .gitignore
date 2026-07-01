@@ -1,3 +1,5 @@
+.env
+
 ./e-commerce/.env
 
 backend/logs/

@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,6 +16,9 @@ import java.io.IOException;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+    @Value("${oauth2.redirect.url}")
+    private String redirectUrl;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -34,7 +38,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         String jwt = jwtUtils.generateToken(userDetails);
 
         // redirect back to React with the token (or set as httpOnly cookie)
-        response.sendRedirect("http://localhost:5173/oauth2/redirect?token=" + jwt);
+        response.sendRedirect(redirectUrl + "?token=" + jwt);
     }
 
 

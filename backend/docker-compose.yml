@@ -35,6 +35,7 @@ services:
       STRIPE_WEBHOOK: ${STRIPE_WEBHOOK}
       CLIENT_ID: ${CLIENT_ID}
       CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_SUCCESS_OAUTH2_URL: ${REDIRECT_SUCCESS_OAUTH2_URL}
     volumes:
       - springboot-images:/app
     networks:
